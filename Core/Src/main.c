@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "I2C.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -90,7 +90,7 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-
+  uint8_t buff[8];
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -100,6 +100,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  I2C_ReadWrite(1, 1, 1, buff, 8, NULL, 0);
+	  HAL_Delay(10);
   }
   /* USER CODE END 3 */
 }
@@ -169,7 +171,7 @@ static void MX_I2C1_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN I2C1_Init 2 */
-
+  I2C_Init(&hi2c1, 1);
   /* USER CODE END I2C1_Init 2 */
 
 }

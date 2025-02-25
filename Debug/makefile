@@ -9,6 +9,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include PeripheralPorts/subdir.mk
 -include Drivers/STM32F1xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
@@ -60,8 +61,8 @@ all: main-build
 main-build: BAR30-F103.elf secondary-outputs
 
 # Tool invocations
-BAR30-F103.elf BAR30-F103.map: $(OBJS) $(USER_OBJS) C:\Users\esenk\STM32CubeIDE\workspace_1.17.0\BAR30-F103\BAR30-F103\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "BAR30-F103.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\esenk\STM32CubeIDE\workspace_1.17.0\BAR30-F103\BAR30-F103\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BAR30-F103.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+BAR30-F103.elf BAR30-F103.map: $(OBJS) $(USER_OBJS) C:\Users\esenk\STM32CubeIDE\workspace_1.17.0\BAR30-F103\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "BAR30-F103.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\esenk\STM32CubeIDE\workspace_1.17.0\BAR30-F103\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BAR30-F103.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
