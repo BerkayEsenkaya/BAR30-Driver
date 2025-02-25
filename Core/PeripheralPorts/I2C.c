@@ -1,6 +1,6 @@
 /**
  * \file I2C.c
- * \author Berkay Esenkaya
+ * \author Berkay Esenkaya (BAUROV Software Team)
  * \brief I2C communication peripheral porters
  * \date 24.02.2025
  *
@@ -56,9 +56,9 @@ I2C_ReturnTypeDef_T I2C_ReadWrite(uint8_t I2CNo, uint8_t TxdevAddress, uint8_t R
  */
 I2C_HandleTypeDef_T* I2C_GetModule(uint8_t I2CNo){
 	switch(I2CNo){
-		case 1 : return &I2C_1;break;
-		case 2 : return &I2C_2;break;
-		case 3 : return &I2C_3;break;
+		case I2CNO_1 : return &I2C_1; break;
+		case I2CNO_2 : return &I2C_2; break;
+		case I2CNO_3 : return &I2C_3; break;
 		default : return NULL; break;
 	}
 }

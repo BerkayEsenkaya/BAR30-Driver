@@ -100,7 +100,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  I2C_ReadWrite(1, 1, 1, buff, 8, NULL, 0);
+	  I2C_ReadWrite(I2CNO_1 ,1 ,1 ,buff, 8, NULL, 0);
 	  HAL_Delay(10);
   }
   /* USER CODE END 3 */
@@ -171,7 +171,7 @@ static void MX_I2C1_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN I2C1_Init 2 */
-  I2C_Init(&hi2c1, 1);
+  I2C_Init(&hi2c1, I2CNO_1);
   /* USER CODE END I2C1_Init 2 */
 
 }
@@ -207,7 +207,21 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_Delay(uint32_t Delay)
+{
+  uint32_t tickstart = HAL_GetTick();
+  uint32_t wait = Delay;
 
+  /* Add a freq to guarantee minimum wait */
+  if (wait < HAL_MAX_DELAY)
+  {
+    wait += (uint32_t)(uwTickFreq);
+  }
+
+  while ((HAL_GetTick() - tickstart) < wait)
+  {
+  }
+}
 /* USER CODE END 4 */
 
 /**

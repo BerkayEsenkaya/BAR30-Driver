@@ -3,6 +3,10 @@
 
 #include "stdint.h"
 
+#define I2CNO_1 (1)
+#define I2CNO_2 (2)
+#define I2CNO_3 (3)
+
 typedef struct{
 	void *I2C_handle;
 	uint8_t I2C_NO;
