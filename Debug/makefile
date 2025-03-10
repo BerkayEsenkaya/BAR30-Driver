@@ -9,9 +9,11 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include Drivers/STM32F1xx_HAL_Driver/Src/subdir.mk
+-include Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
+-include Core/Sensors/subdir.mk
+-include Core/PeripheralPorts/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -34,34 +36,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := BAR30-F103
+BUILD_ARTIFACT_NAME := BAR30-F407
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-BAR30-F103.elf \
+BAR30-F407.elf \
 
 MAP_FILES += \
-BAR30-F103.map \
+BAR30-F407.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-BAR30-F103.list \
+BAR30-F407.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: BAR30-F103.elf secondary-outputs
+main-build: BAR30-F407.elf secondary-outputs
 
 # Tool invocations
-BAR30-F103.elf BAR30-F103.map: $(OBJS) $(USER_OBJS) C:\Users\esenk\STM32CubeIDE\workspace_1.17.0\BAR30-F103\BAR30-F103\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "BAR30-F103.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\esenk\STM32CubeIDE\workspace_1.17.0\BAR30-F103\BAR30-F103\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BAR30-F103.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+BAR30-F407.elf BAR30-F407.map: $(OBJS) $(USER_OBJS) C:\Users\esenk\STM32CubeIDE\workspace_1.17.0\BAR30-F407\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "BAR30-F407.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\esenk\STM32CubeIDE\workspace_1.17.0\BAR30-F407\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BAR30-F407.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,14 +72,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-BAR30-F103.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "BAR30-F103.list"
+BAR30-F407.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "BAR30-F407.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) BAR30-F103.elf BAR30-F103.list BAR30-F103.map default.size.stdout
+	-$(RM) BAR30-F407.elf BAR30-F407.list BAR30-F407.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
