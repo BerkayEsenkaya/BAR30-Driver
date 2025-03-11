@@ -101,14 +101,22 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   MPU6050_Init(&MPU6050_1, I2CNO_2, MPU6050_DEVICE_ADDRESS);
-  AvarageFilter_Init(&AvarageFilter_MPU6050_1, 5);
+  HAL_Delay(500);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_X, 10);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_Y, 10);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_Z, 10);
 while (1)
 {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
 	MPU6050_Read_ACCEL_Data(&MPU6050_1);
-	AvarageFilter(&AvarageFilter_MPU6050_1, MPU6050_1.RegGroup_Data.ACCEL_Axis_X_Data);
+	AvarageFilter(&AvarageFilter_MPU6050_X, MPU6050_1.RegGroup_Data.ACCEL_Axis_X_Data);
+	AvarageFilter(&AvarageFilter_MPU6050_Y, MPU6050_1.RegGroup_Data.ACCEL_Axis_Y_Data);
+	AvarageFilter(&AvarageFilter_MPU6050_Z, MPU6050_1.RegGroup_Data.ACCEL_Axis_Z_Data);
+	MPU6050_1.FilteredValues.ACCEL_Axis_X_Filtered = AvarageFilter_MPU6050_X.Avarage;
+	MPU6050_1.FilteredValues.ACCEL_Axis_Y_Filtered = AvarageFilter_MPU6050_Y.Avarage;
+	MPU6050_1.FilteredValues.ACCEL_Axis_Z_Filtered = AvarageFilter_MPU6050_Z.Avarage;
 	MPU6050_Calculate_mG_Value(&MPU6050_1);
 	HAL_Delay(10);
   }

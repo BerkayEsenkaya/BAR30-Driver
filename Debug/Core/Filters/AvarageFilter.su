@@ -1,2 +1,2 @@
 ../Core/Filters/AvarageFilter.c:12:6:AvarageFilter_Init	16	static
-../Core/Filters/AvarageFilter.c:19:9:AvarageFilter	16	static
+../Core/Filters/AvarageFilter.c:19:9:AvarageFilter	48	static

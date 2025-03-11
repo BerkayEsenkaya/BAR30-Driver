@@ -96,6 +96,12 @@ typedef struct{
 }MPU6050_Data_Registers_T;
 
 typedef struct{
+	int16_t ACCEL_Axis_X_Filtered;
+	int16_t ACCEL_Axis_Y_Filtered;
+	int16_t ACCEL_Axis_Z_Filtered;
+}MPU6050_AvarageFilteredValue;
+
+typedef struct{
 	int16_t ACCEL_Axis_X_Mg;
 	int16_t ACCEL_Axis_Y_Mg;
 	int16_t ACCEL_Axis_Z_Mg;
@@ -105,6 +111,7 @@ typedef struct{
 	MPU6050_DeviceParam_T devParam;
 	MPU6050_Config_Registers_T RegGroup_Config;
 	MPU6050_Data_Registers_T RegGroup_Data;
+	MPU6050_AvarageFilteredValue FilteredValues;
 	MPU6050_G_Values_T CalculatedValues;
 }MPU6050_Sensor_T;
 
