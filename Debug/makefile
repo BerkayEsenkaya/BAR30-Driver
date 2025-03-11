@@ -14,6 +14,7 @@ RM := rm -rf
 -include Core/Src/subdir.mk
 -include Core/Sensors/subdir.mk
 -include Core/PeripheralPorts/subdir.mk
+-include Core/Filters/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)

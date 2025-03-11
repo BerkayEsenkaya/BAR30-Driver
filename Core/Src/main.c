@@ -24,6 +24,8 @@
 #include "I2C.h"
 #include "BAR30.h"
 #include "MPU6050.h"
+#include "AvarageFilter.h"
+#include "MPU6050_Math.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -98,24 +100,17 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
-uint8_t WhoIAm[1];
-uint8_t whoiamregister[1];
-whoiamregister[0] = 0x75;
-
+  MPU6050_Init(&MPU6050_1, I2CNO_2, MPU6050_DEVICE_ADDRESS);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_1, 5);
 while (1)
 {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  HAL_GPIO_TogglePin(GPIOD, LD4_Pin | LD3_Pin);
-	  MPU6050_Init(&MPU6050_1, 2, 0xD0);
-//	  HAL_I2C_Master_Transmit(&hi2c2, 0xD0, whoiamregister,1, 100);
-//	  HAL_I2C_Master_Receive(&hi2c2, 0xD0, WhoIAm, 1, 100);
-//      BAR30_Get_AllPromData(&BAR30_1);
-
-	  HAL_Delay(250);
-
+	MPU6050_Read_ACCEL_Data(&MPU6050_1);
+	AvarageFilter(&AvarageFilter_MPU6050_1, MPU6050_1.RegGroup_Data.ACCEL_Axis_X_Data);
+	MPU6050_Calculate_mG_Value(&MPU6050_1);
+	HAL_Delay(10);
   }
   /* USER CODE END 3 */
 }

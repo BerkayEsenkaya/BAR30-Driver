@@ -1,3 +1,12 @@
-../Core/Sensors/MPU6050.c:13:25:MPU6050_Init	2
-../Core/Sensors/MPU6050.c:25:25:MPU6050_Write	1
-../Core/Sensors/MPU6050.c:29:25:MPU6050_Read	1
+../Core/Sensors/MPU6050.c:18:25:MPU6050_DeviceReset	1
+../Core/Sensors/MPU6050.c:28:25:MPU6050_AllSignalPathReset	1
+../Core/Sensors/MPU6050.c:38:25:MPU6050_DeviceSleep	1
+../Core/Sensors/MPU6050.c:48:25:MPU6050_DeviceStartCycle	1
+../Core/Sensors/MPU6050.c:58:25:MPU6050_Init	2
+../Core/Sensors/MPU6050.c:77:25:MP6050_Get_WhoIAm_Data	2
+../Core/Sensors/MPU6050.c:89:25:MPU6050_Set_ConfigRegister	1
+../Core/Sensors/MPU6050.c:103:25:MPU6050_Set_GYROConfigRegister	1
+../Core/Sensors/MPU6050.c:114:25:MPU6050_Set_ACCELConfigRegister	1
+../Core/Sensors/MPU6050.c:125:25:MPU6050_Read_ACCEL_Data	1
+../Core/Sensors/MPU6050.c:149:25:MPU6050_Write	2
+../Core/Sensors/MPU6050.c:161:25:MPU6050_Read	2
