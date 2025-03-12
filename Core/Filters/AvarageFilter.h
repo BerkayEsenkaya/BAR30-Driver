@@ -7,7 +7,7 @@
 
 typedef struct{
 	uint8_t FilterBufferSize;
-	int16_t buffer[30];
+	int16_t buffer[64];
 	int64_t sum;
 	int16_t Avarage;
 	uint8_t DataCounter;

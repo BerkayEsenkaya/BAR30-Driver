@@ -67,7 +67,7 @@
 #define MPU6050_DATA_TEMP_DISABLE (0x01<<3)
 #define MPU6050_DATA_CLK_INTERNAL (0x00)
 
-#define MPU6050_DATA_ALL_SIGMALPATH_RESET (0x07)
+#define MPU6050_DATA_ALL_SIGNALPATH_RESET (0x07)
 
 typedef enum{
 	MPU6050_OK,
@@ -126,6 +126,6 @@ MPU6050_ReturnTypeDef_T MPU6050_Set_ConfigRegister(MPU6050_Sensor_T *handle, uin
 MPU6050_ReturnTypeDef_T MPU6050_Set_GYROConfigRegister(MPU6050_Sensor_T *handle, uint8_t scaleRange, uint8_t STaxisEnabled);
 MPU6050_ReturnTypeDef_T MPU6050_Set_ACCELConfigRegister(MPU6050_Sensor_T *handle, uint8_t scaleRange, uint8_t STaxisEnabled);
 MPU6050_ReturnTypeDef_T MPU6050_Read_ACCEL_Data(MPU6050_Sensor_T *handle);
-MPU6050_ReturnTypeDef_T MPU6050_Write(MPU6050_Sensor_T *handle, uint8_t *TxBuff);
-MPU6050_ReturnTypeDef_T MPU6050_Read(MPU6050_Sensor_T *handle, uint8_t *TxBuff, uint8_t *RxBuff);
-
+MPU6050_ReturnTypeDef_T MPU6050_Write(MPU6050_Sensor_T *handle, uint8_t Register, uint8_t Data);
+MPU6050_ReturnTypeDef_T MPU6050_Read(MPU6050_Sensor_T *handle, uint8_t Register, uint8_t *RxBuff);
+MPU6050_ReturnTypeDef_T MPU6050_MultiRead(MPU6050_Sensor_T *handle, uint8_t *TxBuff, uint8_t *RxBuff, uint8_t RxLenght);

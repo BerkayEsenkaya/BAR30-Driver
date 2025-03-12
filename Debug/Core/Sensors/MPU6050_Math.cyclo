@@ -1,1 +1,2 @@
-../Core/Sensors/MPU6050_Math.c:12:6:MPU6050_Calculate_mG_Value	4
+../Core/Sensors/MPU6050_Math.c:13:6:MPU6050_MATH_Calculate_mG_Value	1
+../Core/Sensors/MPU6050_Math.c:30:10:MPU6050_MATH_Get_LSB_Value	5

@@ -102,9 +102,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   MPU6050_Init(&MPU6050_1, I2CNO_2, MPU6050_DEVICE_ADDRESS);
   HAL_Delay(500);
-  AvarageFilter_Init(&AvarageFilter_MPU6050_X, 10);
-  AvarageFilter_Init(&AvarageFilter_MPU6050_Y, 10);
-  AvarageFilter_Init(&AvarageFilter_MPU6050_Z, 10);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_X, 20);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_Y, 20);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_Z, 20);
 while (1)
 {
     /* USER CODE END WHILE */
@@ -117,7 +117,7 @@ while (1)
 	MPU6050_1.FilteredValues.ACCEL_Axis_X_Filtered = AvarageFilter_MPU6050_X.Avarage;
 	MPU6050_1.FilteredValues.ACCEL_Axis_Y_Filtered = AvarageFilter_MPU6050_Y.Avarage;
 	MPU6050_1.FilteredValues.ACCEL_Axis_Z_Filtered = AvarageFilter_MPU6050_Z.Avarage;
-	MPU6050_Calculate_mG_Value(&MPU6050_1);
+	MPU6050_MATH_Calculate_mG_Value(&MPU6050_1);
 	HAL_Delay(10);
   }
   /* USER CODE END 3 */
