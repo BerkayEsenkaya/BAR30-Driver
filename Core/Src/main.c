@@ -102,9 +102,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   MPU6050_Init(&MPU6050_1, I2CNO_2, MPU6050_DEVICE_ADDRESS);
   HAL_Delay(500);
-  AvarageFilter_Init(&AvarageFilter_MPU6050_X, 20);
-  AvarageFilter_Init(&AvarageFilter_MPU6050_Y, 20);
-  AvarageFilter_Init(&AvarageFilter_MPU6050_Z, 20);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_X, 5);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_Y, 5);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_Z, 5);
 while (1)
 {
     /* USER CODE END WHILE */

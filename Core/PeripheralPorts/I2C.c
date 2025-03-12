@@ -33,12 +33,14 @@ I2C_ReturnTypeDef_T I2C_ReadWrite(uint8_t I2CNo, uint8_t DevAddress, uint8_t *tx
 	HAL_StatusTypeDef res;
 	i2c = I2C_GetModule(I2CNo);
 	if(rxLenght == 0){
-		res = HAL_I2C_Master_Transmit(i2c->handle , DevAddress, txBuff, txLenght, 300);
+		res = HAL_I2C_Master_Transmit_IT(i2c->handle , DevAddress, txBuff, txLenght);
+		I2C_WaitFlag(I2CNo);
 		return res == I2C_ERROR;
 	}else{
-		HAL_I2C_Master_Transmit(i2c->handle , DevAddress, txBuff, txLenght, 300);
-
-		res = HAL_I2C_Master_Receive(i2c->handle, DevAddress, rxBuff, rxLenght, 300);
+		HAL_I2C_Master_Transmit_IT(i2c->handle , DevAddress, txBuff, txLenght);
+		I2C_WaitFlag(I2CNo);
+		res = HAL_I2C_Master_Receive_IT(i2c->handle, DevAddress, rxBuff, rxLenght);
+		I2C_WaitFlag(I2CNo);
 		return res == I2C_ERROR;
 	}
 }
@@ -56,4 +58,56 @@ I2C_HandleTypeDef_T* I2C_GetModule(uint8_t I2CNo){
 		case I2CNO_3 : return &I2C_3; break;
 		default : return NULL; break;
 	}
+}
+
+/** Brief description which ends at this dot. Details follow
+ *  here.
+ */
+void I2C_WaitFlag(uint8_t I2CNo){
+	I2C_HandleTypeDef_T *i2c;
+	uint8_t i=0;
+	i2c = I2C_GetModule(I2CNo);
+	while((!i2c->flag) & (i<20)){
+		HAL_Delay(1);
+		i++;
+	}
+	i2c->flag = 0;
+}
+
+/**********************************************************
+ * PRIVATE FUNCTIONS
+ *********************************************************/
+/** Brief description which ends at this dot. Details follow
+ *  here.
+ */
+void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+  /* Prevent unused argument(s) compilation warning */
+  if(I2C_1.handle == hi2c)
+	  I2C_1.flag = 1;
+  else if(I2C_2.handle == hi2c)
+  	  I2C_2.flag = 1;
+  else if(I2C_3.handle == hi2c)
+  	  I2C_3.flag = 1;
+  /* NOTE : This function should not be modified, when the callback is needed,
+            the HAL_I2C_MasterTxCpltCallback could be implemented in the user file
+   */
+}
+
+/** Brief description which ends at this dot. Details follow
+ *  here.
+ */
+void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+  /* Prevent unused argument(s) compilation warning */
+	if(I2C_1.handle == hi2c)
+		I2C_1.flag = 1;
+	else if(I2C_2.handle == hi2c)
+	  	I2C_2.flag = 1;
+	else if(I2C_3.handle == hi2c)
+	  	I2C_3.flag = 1;
+
+  /* NOTE : This function should not be modified, when the callback is needed,
+            the HAL_I2C_MasterTxCpltCallback could be implemented in the user file
+   */
 }

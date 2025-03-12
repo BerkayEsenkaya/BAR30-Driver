@@ -1,3 +1,6 @@
 ../Core/PeripheralPorts/I2C.c:21:6:I2C_Init	1
 ../Core/PeripheralPorts/I2C.c:31:21:I2C_ReadWrite	2
-../Core/PeripheralPorts/I2C.c:52:22:I2C_GetModule	5
+../Core/PeripheralPorts/I2C.c:54:22:I2C_GetModule	5
+../Core/PeripheralPorts/I2C.c:66:6:I2C_WaitFlag	2
+../Core/PeripheralPorts/I2C.c:83:6:HAL_I2C_MasterTxCpltCallback	4
+../Core/PeripheralPorts/I2C.c:100:6:HAL_I2C_MasterRxCpltCallback	4
