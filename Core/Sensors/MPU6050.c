@@ -51,7 +51,7 @@ MPU6050_ReturnTypeDef_T MPU6050_Init(MPU6050_Sensor_T *handle, uint8_t I2C_No, u
 	HAL_Delay(10);
 	MPU6050_AllSignalPathReset(handle);
     if(!MP6050_Get_WhoIAm_Data(handle)){
-    	MPU6050_Set_ConfigRegister(handle, MPU6050_DATA_SAMPLERATE_94, 0);
+    	MPU6050_Set_ConfigRegister(handle, MPU6050_DATA_SAMPLERATE_184, 0);
 		MPU6050_Set_GYROConfigRegister(handle, MPU6050_DATA_GYRO_SCALERANGE_250, 0);
 		MPU6050_Set_ACCELConfigRegister(handle, MPU6050_DATA_ACCEL_SCALERANGE_2, 0); //MPU6050_DATA_ACCEL_ST_XAXIS_ENABLED | MPU6050_DATA_ACCEL_ST_YAXIS_ENABLED | MPU6050_DATA_ACCEL_ST_ZAXIS_ENABLED);
 		HAL_Delay(10);
