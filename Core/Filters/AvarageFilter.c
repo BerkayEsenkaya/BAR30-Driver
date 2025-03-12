@@ -7,8 +7,8 @@
  */
 #include "AvarageFilter.h"
 
-AvarageFilterParam_T AvarageFilter_MPU6050_X, AvarageFilter_MPU6050_Y, AvarageFilter_MPU6050_Z;
-
+AvarageFilterParam_T AvarageFilter_MPU6050_ACCEL_X, AvarageFilter_MPU6050_ACCEL_Y, AvarageFilter_MPU6050_ACCEL_Z,
+AvarageFilter_MPU6050_GYRO_X, AvarageFilter_MPU6050_GYRO_Y, AvarageFilter_MPU6050_GYRO_Z;
 void AvarageFilter_Init(AvarageFilterParam_T *handle, uint8_t FilterBufferSize){
 	handle->FilterBufferSize = FilterBufferSize;
 	handle->DataCounter = 0;

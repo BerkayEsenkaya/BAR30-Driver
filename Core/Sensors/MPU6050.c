@@ -52,6 +52,8 @@ MPU6050_ReturnTypeDef_T MPU6050_Init(MPU6050_Sensor_T *handle, uint8_t I2C_No, u
 	MPU6050_AllSignalPathReset(handle);
     if(!MP6050_Get_WhoIAm_Data(handle)){
     	MPU6050_Set_ConfigRegister(handle, MPU6050_DATA_SAMPLERATE_184, 0);
+    	MPU6050_Interrupt_Pin_Config(handle, MPU6050_DATA_INT_LEVEL_ACTIVE_HIGH | MPU6050_DATA_INT_PUSHPULL | MPU6050_DATA_INT_LATCH_DISABLE | MPU6050_DATA_INT_OTO_CLEAR);
+    	MPU6050_Interrupt_Config(handle, MPU6050_DATA_INT_DATA_RDY_ENABLE);
 		MPU6050_Set_GYROConfigRegister(handle, MPU6050_DATA_GYRO_SCALERANGE_250, 0);
 		MPU6050_Set_ACCELConfigRegister(handle, MPU6050_DATA_ACCEL_SCALERANGE_2, 0); //MPU6050_DATA_ACCEL_ST_XAXIS_ENABLED | MPU6050_DATA_ACCEL_ST_YAXIS_ENABLED | MPU6050_DATA_ACCEL_ST_ZAXIS_ENABLED);
 		HAL_Delay(10);
@@ -101,13 +103,6 @@ MPU6050_ReturnTypeDef_T MPU6050_Set_ACCELConfigRegister(MPU6050_Sensor_T *handle
  *  here.
  */
 MPU6050_ReturnTypeDef_T MPU6050_Read_ACCEL_Data(MPU6050_Sensor_T *handle){
-//	uint8_t  Data[6];
-//	if(MPU6050_MultiRead(handle, MPU6050_REGISTER_ACCEL_OUT_X_H, Data, 6))
-//		return MPU6050_ERROR;
-//	handle->RegGroup_Data.ACCEL_Axis_X_Data = (int16_t)((Data[0]<<8) | Data[1]);
-//	handle->RegGroup_Data.ACCEL_Axis_Y_Data = (int16_t)((Data[2]<<8) | Data[3]);
-//	handle->RegGroup_Data.ACCEL_Axis_Z_Data = (int16_t)((Data[4]<<8) | Data[5]);
-//	return MPU6050_OK;
 	uint8_t DataH[1], DataL[1] ;
 	MPU6050_Read(handle, MPU6050_REGISTER_ACCEL_OUT_X_H, DataH);
 	MPU6050_Read(handle, MPU6050_REGISTER_ACCEL_OUT_X_L, DataL);
@@ -122,6 +117,40 @@ MPU6050_ReturnTypeDef_T MPU6050_Read_ACCEL_Data(MPU6050_Sensor_T *handle){
 	handle->RegGroup_Data.ACCEL_Axis_Z_Data = (int16_t)((DataH[0]<<8) | DataL[0]);
 	return MPU6050_OK;
 }
+
+/** Brief description which ends at this dot. Details follow
+ *  here.
+ */
+MPU6050_ReturnTypeDef_T MPU6050_Read_GYRO_Data(MPU6050_Sensor_T *handle){
+	uint8_t DataH[1], DataL[1] ;
+	MPU6050_Read(handle, MPU6050_REGISTER_GYRO_OUT_X_H, DataH);
+	MPU6050_Read(handle, MPU6050_REGISTER_GYRO_OUT_X_L, DataL);
+	handle->RegGroup_Data.GYRO_Axis_X_Data = (int16_t)((DataH[0]<<8) | DataL[0]);
+
+	MPU6050_Read(handle, MPU6050_REGISTER_GYRO_OUT_Y_H, DataH);
+	MPU6050_Read(handle, MPU6050_REGISTER_GYRO_OUT_Y_L, DataL);
+	handle->RegGroup_Data.GYRO_Axis_Y_Data = (int16_t)(DataH[0]<<8) | DataL[0];
+
+	MPU6050_Read(handle, MPU6050_REGISTER_GYRO_OUT_Z_H, DataH);
+	MPU6050_Read(handle, MPU6050_REGISTER_GYRO_OUT_Z_L, DataL);
+	handle->RegGroup_Data.GYRO_Axis_Z_Data = (int16_t)((DataH[0]<<8) | DataL[0]);
+	return MPU6050_OK;
+}
+
+/** Brief description which ends at this dot. Details follow
+ *  here.
+ */
+MPU6050_ReturnTypeDef_T MPU6050_Interrupt_Pin_Config(MPU6050_Sensor_T *handle, uint8_t data){
+	return MPU6050_Write(handle, MPU6050_REGISTER_INTERRUPT_PIN_CONFIG , data);
+}
+
+/** Brief description which ends at this dot. Details follow
+ *  here.
+ */
+MPU6050_ReturnTypeDef_T MPU6050_Interrupt_Config(MPU6050_Sensor_T *handle, uint8_t data){
+	return MPU6050_Write(handle, MPU6050_REGISTER_INTERRUPT_ENABLE , data);
+}
+
 
 /** Brief description which ends at this dot. Details follow
  *  here.

@@ -106,22 +106,41 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   MPU6050_Init(&MPU6050_1, I2CNO_2, MPU6050_DEVICE_ADDRESS);
   HAL_Delay(500);
-  AvarageFilter_Init(&AvarageFilter_MPU6050_X, 5);
-  AvarageFilter_Init(&AvarageFilter_MPU6050_Y, 5);
-  AvarageFilter_Init(&AvarageFilter_MPU6050_Z, 5);
+//  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_X, 5);
+//  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_Y, 5);
+//  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_Z, 5);
+//  AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_X, 5);
+//  AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_Y, 5);
+//  AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_Z, 5);
 while (1)
 {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	MPU6050_Read_ACCEL_Data(&MPU6050_1);
-	AvarageFilter(&AvarageFilter_MPU6050_X, MPU6050_1.RegGroup_Data.ACCEL_Axis_X_Data);
-	AvarageFilter(&AvarageFilter_MPU6050_Y, MPU6050_1.RegGroup_Data.ACCEL_Axis_Y_Data);
-	AvarageFilter(&AvarageFilter_MPU6050_Z, MPU6050_1.RegGroup_Data.ACCEL_Axis_Z_Data);
-	MPU6050_1.FilteredValues.ACCEL_Axis_X_Filtered = AvarageFilter_MPU6050_X.Avarage;
-	MPU6050_1.FilteredValues.ACCEL_Axis_Y_Filtered = AvarageFilter_MPU6050_Y.Avarage;
-	MPU6050_1.FilteredValues.ACCEL_Axis_Z_Filtered = AvarageFilter_MPU6050_Z.Avarage;
-	MPU6050_MATH_Calculate_mG_Value(&MPU6050_1);
+	if(MPU6050_1.dataReadyFlag){
+		MPU6050_1.dataReadyFlag = 0;
+		MPU6050_Read_ACCEL_Data(&MPU6050_1);
+		MPU6050_Read_GYRO_Data(&MPU6050_1);
+//		AvarageFilter(&AvarageFilter_MPU6050_ACCEL_X, MPU6050_1.RegGroup_Data.ACCEL_Axis_X_Data);
+//		AvarageFilter(&AvarageFilter_MPU6050_ACCEL_Y, MPU6050_1.RegGroup_Data.ACCEL_Axis_Y_Data);
+//		AvarageFilter(&AvarageFilter_MPU6050_ACCEL_Z, MPU6050_1.RegGroup_Data.ACCEL_Axis_Z_Data);
+//		AvarageFilter(&AvarageFilter_MPU6050_GYRO_X, MPU6050_1.RegGroup_Data.GYRO_Axis_X_Data);
+//		AvarageFilter(&AvarageFilter_MPU6050_GYRO_Y, MPU6050_1.RegGroup_Data.GYRO_Axis_Y_Data);
+//		AvarageFilter(&AvarageFilter_MPU6050_GYRO_Z, MPU6050_1.RegGroup_Data.GYRO_Axis_Z_Data);
+//		MPU6050_1.FilteredValues.ACCEL_Axis_X_Filtered = AvarageFilter_MPU6050_ACCEL_X.Avarage;
+//		MPU6050_1.FilteredValues.ACCEL_Axis_Y_Filtered = AvarageFilter_MPU6050_ACCEL_Y.Avarage;
+//		MPU6050_1.FilteredValues.ACCEL_Axis_Z_Filtered = AvarageFilter_MPU6050_ACCEL_Z.Avarage;
+//		MPU6050_1.FilteredValues.GYRO_Axis_X_Filtered = AvarageFilter_MPU6050_GYRO_X.Avarage;
+//		MPU6050_1.FilteredValues.GYRO_Axis_Y_Filtered = AvarageFilter_MPU6050_GYRO_Y.Avarage;
+//		MPU6050_1.FilteredValues.GYRO_Axis_Z_Filtered = AvarageFilter_MPU6050_GYRO_Z.Avarage;
+		MPU6050_1.FilteredValues.ACCEL_Axis_X_Filtered = MPU6050_1.RegGroup_Data.ACCEL_Axis_X_Data;
+		MPU6050_1.FilteredValues.ACCEL_Axis_Y_Filtered = MPU6050_1.RegGroup_Data.ACCEL_Axis_Y_Data;
+		MPU6050_1.FilteredValues.ACCEL_Axis_Z_Filtered = MPU6050_1.RegGroup_Data.ACCEL_Axis_Z_Data;
+		MPU6050_1.FilteredValues.GYRO_Axis_X_Filtered = MPU6050_1.RegGroup_Data.GYRO_Axis_X_Data;
+		MPU6050_1.FilteredValues.GYRO_Axis_Y_Filtered = MPU6050_1.RegGroup_Data.GYRO_Axis_Y_Data;
+		MPU6050_1.FilteredValues.GYRO_Axis_Z_Filtered = MPU6050_1.RegGroup_Data.GYRO_Axis_Z_Data;
+		MPU6050_MATH_Calculate_mG_Value(&MPU6050_1);
+	}
 	HAL_Delay(10);
   }
   /* USER CODE END 3 */
@@ -245,9 +264,6 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, LD4_Pin|LD3_Pin|LD5_Pin|LD6_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PC0 */
@@ -264,9 +280,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : PE9 */
   GPIO_InitStruct.Pin = GPIO_PIN_9;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LD4_Pin LD3_Pin LD5_Pin LD6_Pin */
@@ -276,18 +291,30 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PA9 PA11 */
-  GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_11;
+  /*Configure GPIO pin : PA11 */
+  GPIO_InitStruct.Pin = GPIO_PIN_11;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  /* Prevent unused argument(s) compilation warning */
+  if(GPIO_PIN_9)
+	  MPU6050_1.dataReadyFlag = 1;
+  /* NOTE: This function Should not be modified, when the callback is needed,
+           the HAL_GPIO_EXTI_Callback could be implemented in the user file
+   */
+}
 /* USER CODE END 4 */
 
 /**

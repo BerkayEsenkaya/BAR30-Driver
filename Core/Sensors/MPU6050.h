@@ -14,6 +14,10 @@
 #define MPU6050_REGISTER_CONFIG (0x1A)
 #define MPU6050_REGISTER_GYRO_CONFIG (0x1B)
 #define MPU6050_REGISTER_ACCEL_CONFIG (0x1C)
+#define MPU6050_REGISTER_FIFO_ENABLE (0x23)
+#define MPU6050_REGISTER_INTERRUPT_PIN_CONFIG (0x37)
+#define MPU6050_REGISTER_INTERRUPT_ENABLE (0x38)
+#define MPU6050_REGISTER_INTERRUPT_STATUS (0x3A)
 #define MPU6050_REGISTER_ACCEL_OUT_X_H (0x3B)
 #define MPU6050_REGISTER_ACCEL_OUT_X_L (0x3C)
 #define MPU6050_REGISTER_ACCEL_OUT_Y_H (0x3D)
@@ -31,6 +35,9 @@
 #define MPU6050_REGISTER_SIGNAL_PATH_RESET (0x68)
 #define MPU6050_REGISTER_PWR_MGMT_1 (0x6B)
 #define MPU6050_REGISTER_PWR_MGMT_2 (0x6C)
+#define MPU6050_REGISTER_FIFO_COUNT_H (0x72)
+#define MPU6050_REGISTER_FIFO_COUNT_L (0x73)
+#define MPU6050_REGISTER_FIFO_READ (0x74)
 #define MPU6050_REGISTER_WHOIAM (0x75)
 
 #define MPU6050_DATA_WHOIAM (0x68)
@@ -67,6 +74,15 @@
 #define MPU6050_DATA_TEMP_DISABLE (0x01<<3)
 #define MPU6050_DATA_CLK_INTERNAL (0x00)
 
+#define MPU6050_DATA_INT_OTO_CLEAR (0x01<<4)
+#define MPU6050_DATA_INT_LATCH_DISABLE (0x00<<5)
+#define MPU6050_DATA_INT_PUSHPULL (0x00<<6)
+#define MPU6050_DATA_INT_OPENDRAIN (0x01<<6)
+#define MPU6050_DATA_INT_LEVEL_ACTIVE_LOW (0x00<<7)
+#define MPU6050_DATA_INT_LEVEL_ACTIVE_HIGH (0x01<<7)
+
+#define MPU6050_DATA_INT_DATA_RDY_ENABLE (0x01)
+
 #define MPU6050_DATA_ALL_SIGNALPATH_RESET (0x07)
 
 typedef enum{
@@ -99,6 +115,9 @@ typedef struct{
 	int16_t ACCEL_Axis_X_Filtered;
 	int16_t ACCEL_Axis_Y_Filtered;
 	int16_t ACCEL_Axis_Z_Filtered;
+	int16_t GYRO_Axis_X_Filtered;
+	int16_t GYRO_Axis_Y_Filtered;
+	int16_t GYRO_Axis_Z_Filtered;
 }MPU6050_AvarageFilteredValue;
 
 typedef struct{
@@ -108,11 +127,12 @@ typedef struct{
 }MPU6050_G_Values_T;
 
 typedef struct{
+	volatile uint8_t dataReadyFlag;
 	MPU6050_DeviceParam_T devParam;
 	MPU6050_Config_Registers_T RegGroup_Config;
-	MPU6050_Data_Registers_T RegGroup_Data;
-	MPU6050_AvarageFilteredValue FilteredValues;
-	MPU6050_G_Values_T CalculatedValues;
+	volatile MPU6050_Data_Registers_T RegGroup_Data;
+	volatile MPU6050_AvarageFilteredValue FilteredValues;
+	volatile MPU6050_G_Values_T CalculatedValues;
 }MPU6050_Sensor_T;
 
 extern MPU6050_Sensor_T MPU6050_1;
@@ -126,6 +146,9 @@ MPU6050_ReturnTypeDef_T MPU6050_Set_ConfigRegister(MPU6050_Sensor_T *handle, uin
 MPU6050_ReturnTypeDef_T MPU6050_Set_GYROConfigRegister(MPU6050_Sensor_T *handle, uint8_t scaleRange, uint8_t STaxisEnabled);
 MPU6050_ReturnTypeDef_T MPU6050_Set_ACCELConfigRegister(MPU6050_Sensor_T *handle, uint8_t scaleRange, uint8_t STaxisEnabled);
 MPU6050_ReturnTypeDef_T MPU6050_Read_ACCEL_Data(MPU6050_Sensor_T *handle);
+MPU6050_ReturnTypeDef_T MPU6050_Read_GYRO_Data(MPU6050_Sensor_T *handle);
+MPU6050_ReturnTypeDef_T MPU6050_Interrupt_Pin_Config(MPU6050_Sensor_T *handle, uint8_t data);
+MPU6050_ReturnTypeDef_T MPU6050_Interrupt_Config(MPU6050_Sensor_T *handle, uint8_t data);
 MPU6050_ReturnTypeDef_T MPU6050_Write(MPU6050_Sensor_T *handle, uint8_t Register, uint8_t Data);
 MPU6050_ReturnTypeDef_T MPU6050_Read(MPU6050_Sensor_T *handle, uint8_t Register, uint8_t *RxBuff);
 MPU6050_ReturnTypeDef_T MPU6050_MultiRead(MPU6050_Sensor_T *handle, uint8_t *TxBuff, uint8_t *RxBuff, uint8_t RxLenght);

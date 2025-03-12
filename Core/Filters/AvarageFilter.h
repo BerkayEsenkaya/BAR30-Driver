@@ -13,7 +13,6 @@ typedef struct{
 	uint8_t DataCounter;
 }AvarageFilterParam_T;
 
-extern AvarageFilterParam_T AvarageFilter_MPU6050_X, AvarageFilter_MPU6050_Y, AvarageFilter_MPU6050_Z;
-void AvarageFilter_Init(AvarageFilterParam_T *handle, uint8_t FilterBufferSize);
+extern AvarageFilterParam_T AvarageFilter_MPU6050_ACCEL_X, AvarageFilter_MPU6050_ACCEL_Y, AvarageFilter_MPU6050_ACCEL_Z,AvarageFilter_MPU6050_GYRO_X, AvarageFilter_MPU6050_GYRO_Y, AvarageFilter_MPU6050_GYRO_Z;
 uint8_t AvarageFilter(AvarageFilterParam_T *handle, int16_t data);
 #endif /* FILTERS_AVARAGEFILTER_H_ */
