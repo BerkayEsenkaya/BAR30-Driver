@@ -29,9 +29,31 @@ uint8_t AvarageFilter(AvarageFilterParam_T *handle, int16_t data){
 			handle->buffer[handle->DataCounter] = 0;
 		}
 	handle->DataCounter = handle->FilterBufferSize-2;
+    return AvaragePeriodDone;
 	}else{
 		handle->buffer[handle->DataCounter] = data;
 		++handle->DataCounter;
+		return AvaragePeriodContinue;
+	}
+}
+
+uint8_t AvarageFilter2(AvarageFilterParam_T *handle, int16_t data){
+
+	if(handle->DataCounter == handle->FilterBufferSize){
+		for(int i = 0; i <= handle->DataCounter; i++ ){
+			handle->sum +=  handle->buffer[i];
+		}
+		handle->Avarage = handle->sum / handle->FilterBufferSize;
+		handle->sum = 0;
+		for(int i = 0; i <=handle->DataCounter; i++ ){
+			handle->buffer[i] = 0;
+		}
+	handle->DataCounter = 0;
+    return AvaragePeriodDone;
+	}else{
+		handle->buffer[handle->DataCounter] = data;
+		++handle->DataCounter;
+		return AvaragePeriodContinue;
 	}
 
 }

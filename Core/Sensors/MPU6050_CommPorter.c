@@ -8,6 +8,6 @@
 #include "I2C.h"
 
 uint8_t MPU6050_SendReceive(uint8_t I2CNo, uint8_t DevAddress, uint8_t *txBuff, uint8_t txLenght, uint8_t *rxBuff, uint8_t rxLenght){
-	HAL_Delay(5);
+	HAL_Delay(1);
 	return I2C_ReadWrite_DMA(I2CNo, DevAddress, txBuff, txLenght, rxBuff, rxLenght);
 }

@@ -11,6 +11,7 @@
 
 #define MPU6050_DEVICE_ADDRESS (0xD0)
 
+#define MPU6050_REGISTER_SAMPLERATE_DIV (0x19)
 #define MPU6050_REGISTER_CONFIG (0x1A)
 #define MPU6050_REGISTER_GYRO_CONFIG (0x1B)
 #define MPU6050_REGISTER_ACCEL_CONFIG (0x1C)
@@ -73,6 +74,17 @@
 #define MPU6050_DATA_DEVICE_CYCLE (0x01<<5)
 #define MPU6050_DATA_TEMP_DISABLE (0x01<<3)
 #define MPU6050_DATA_CLK_INTERNAL (0x00)
+
+#define MPU6050_DATA_LP_WU_FREQUENCY_0 (0x00)
+#define MPU6050_DATA_LP_WU_FREQUENCY_5 (0x01<<6)
+#define MPU6050_DATA_LP_WU_FREQUENCY_20 (0x02<<6)
+#define MPU6050_DATA_LP_WU_FREQUENCY_40 (0x03<<6)
+#define MPU6050_DATA_LP_ACCEL_AXIS_X_GO_STANDBY (0x01<<5)
+#define MPU6050_DATA_LP_ACCEL_AXIS_Y_GO_STANDBY (0x01<<4)
+#define MPU6050_DATA_LP_ACCEL_AXIS_Z_GO_STANDBY (0x01<<3)
+#define MPU6050_DATA_LP_GYRO_AXIS_X_GO_STANDBY (0x01<<2)
+#define MPU6050_DATA_LP_GYRO_AXIS_Y_GO_STANDBY (0x01<<1)
+#define MPU6050_DATA_LP_GYRO_AXIS_Z_GO_STANDBY (0x01)
 
 #define MPU6050_DATA_INT_OTO_CLEAR (0x01<<4)
 #define MPU6050_DATA_INT_LATCH_DISABLE (0x00<<5)
@@ -139,16 +151,19 @@ extern MPU6050_Sensor_T MPU6050_1;
 
 MPU6050_ReturnTypeDef_T MPU6050_DeviceReset(MPU6050_Sensor_T *handle);
 MPU6050_ReturnTypeDef_T MPU6050_DeviceSleep(MPU6050_Sensor_T *handle);
-MPU6050_ReturnTypeDef_T MPU6050_DeviceStartCycle(MPU6050_Sensor_T *handle);
+MPU6050_ReturnTypeDef_T MPU6050_DeviceModeCycle(MPU6050_Sensor_T *handle);
 MPU6050_ReturnTypeDef_T MPU6050_Init(MPU6050_Sensor_T *handle, uint8_t I2C_No, uint8_t DevAddress);
 MPU6050_ReturnTypeDef_T MP6050_Get_WhoIAm_Data(MPU6050_Sensor_T *handle);
+MPU6050_ReturnTypeDef_T MPU6050_Set_SampleRateDivider(MPU6050_Sensor_T *handle, uint8_t divider);
 MPU6050_ReturnTypeDef_T MPU6050_Set_ConfigRegister(MPU6050_Sensor_T *handle, uint8_t sampleRate, uint8_t ExtSyncSet);
 MPU6050_ReturnTypeDef_T MPU6050_Set_GYROConfigRegister(MPU6050_Sensor_T *handle, uint8_t scaleRange, uint8_t STaxisEnabled);
 MPU6050_ReturnTypeDef_T MPU6050_Set_ACCELConfigRegister(MPU6050_Sensor_T *handle, uint8_t scaleRange, uint8_t STaxisEnabled);
+MPU6050_ReturnTypeDef_T MPU6050_Select_FIFO_Members(MPU6050_Sensor_T *handle, uint8_t members);
 MPU6050_ReturnTypeDef_T MPU6050_Read_ACCEL_Data(MPU6050_Sensor_T *handle);
 MPU6050_ReturnTypeDef_T MPU6050_Read_GYRO_Data(MPU6050_Sensor_T *handle);
 MPU6050_ReturnTypeDef_T MPU6050_Interrupt_Pin_Config(MPU6050_Sensor_T *handle, uint8_t data);
 MPU6050_ReturnTypeDef_T MPU6050_Interrupt_Config(MPU6050_Sensor_T *handle, uint8_t data);
+MPU6050_ReturnTypeDef_T MPU6050_AccelLowPowerMode(MPU6050_Sensor_T *handle, uint8_t LowPowerWakeUpFrequency);
 MPU6050_ReturnTypeDef_T MPU6050_Write(MPU6050_Sensor_T *handle, uint8_t Register, uint8_t Data);
 MPU6050_ReturnTypeDef_T MPU6050_Read(MPU6050_Sensor_T *handle, uint8_t Register, uint8_t *RxBuff);
 MPU6050_ReturnTypeDef_T MPU6050_MultiRead(MPU6050_Sensor_T *handle, uint8_t *TxBuff, uint8_t *RxBuff, uint8_t RxLenght);

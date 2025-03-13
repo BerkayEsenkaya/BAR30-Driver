@@ -49,7 +49,6 @@ DMA_HandleTypeDef hdma_i2c2_rx;
 DMA_HandleTypeDef hdma_i2c2_tx;
 
 /* USER CODE BEGIN PV */
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -105,13 +104,14 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   MPU6050_Init(&MPU6050_1, I2CNO_2, MPU6050_DEVICE_ADDRESS);
-  HAL_Delay(500);
-//  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_X, 5);
-//  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_Y, 5);
-//  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_Z, 5);
-//  AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_X, 5);
-//  AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_Y, 5);
-//  AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_Z, 5);
+  HAL_Delay(100);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_X, 5);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_Y, 5);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_Z, 5);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_X, 5);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_Y, 5);
+  AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_Z, 5);
+
 while (1)
 {
     /* USER CODE END WHILE */
@@ -120,29 +120,23 @@ while (1)
 	if(MPU6050_1.dataReadyFlag){
 		MPU6050_1.dataReadyFlag = 0;
 		MPU6050_Read_ACCEL_Data(&MPU6050_1);
-		MPU6050_Read_GYRO_Data(&MPU6050_1);
-//		AvarageFilter(&AvarageFilter_MPU6050_ACCEL_X, MPU6050_1.RegGroup_Data.ACCEL_Axis_X_Data);
-//		AvarageFilter(&AvarageFilter_MPU6050_ACCEL_Y, MPU6050_1.RegGroup_Data.ACCEL_Axis_Y_Data);
-//		AvarageFilter(&AvarageFilter_MPU6050_ACCEL_Z, MPU6050_1.RegGroup_Data.ACCEL_Axis_Z_Data);
-//		AvarageFilter(&AvarageFilter_MPU6050_GYRO_X, MPU6050_1.RegGroup_Data.GYRO_Axis_X_Data);
-//		AvarageFilter(&AvarageFilter_MPU6050_GYRO_Y, MPU6050_1.RegGroup_Data.GYRO_Axis_Y_Data);
-//		AvarageFilter(&AvarageFilter_MPU6050_GYRO_Z, MPU6050_1.RegGroup_Data.GYRO_Axis_Z_Data);
-//		MPU6050_1.FilteredValues.ACCEL_Axis_X_Filtered = AvarageFilter_MPU6050_ACCEL_X.Avarage;
-//		MPU6050_1.FilteredValues.ACCEL_Axis_Y_Filtered = AvarageFilter_MPU6050_ACCEL_Y.Avarage;
-//		MPU6050_1.FilteredValues.ACCEL_Axis_Z_Filtered = AvarageFilter_MPU6050_ACCEL_Z.Avarage;
-//		MPU6050_1.FilteredValues.GYRO_Axis_X_Filtered = AvarageFilter_MPU6050_GYRO_X.Avarage;
-//		MPU6050_1.FilteredValues.GYRO_Axis_Y_Filtered = AvarageFilter_MPU6050_GYRO_Y.Avarage;
-//		MPU6050_1.FilteredValues.GYRO_Axis_Z_Filtered = AvarageFilter_MPU6050_GYRO_Z.Avarage;
-		MPU6050_1.FilteredValues.ACCEL_Axis_X_Filtered = MPU6050_1.RegGroup_Data.ACCEL_Axis_X_Data;
-		MPU6050_1.FilteredValues.ACCEL_Axis_Y_Filtered = MPU6050_1.RegGroup_Data.ACCEL_Axis_Y_Data;
-		MPU6050_1.FilteredValues.ACCEL_Axis_Z_Filtered = MPU6050_1.RegGroup_Data.ACCEL_Axis_Z_Data;
-		MPU6050_1.FilteredValues.GYRO_Axis_X_Filtered = MPU6050_1.RegGroup_Data.GYRO_Axis_X_Data;
-		MPU6050_1.FilteredValues.GYRO_Axis_Y_Filtered = MPU6050_1.RegGroup_Data.GYRO_Axis_Y_Data;
-		MPU6050_1.FilteredValues.GYRO_Axis_Z_Filtered = MPU6050_1.RegGroup_Data.GYRO_Axis_Z_Data;
-		MPU6050_MATH_Calculate_mG_Value(&MPU6050_1);
 	}
-	HAL_Delay(10);
-  }
+		MPU6050_Read_GYRO_Data(&MPU6050_1);
+		if(!AvarageFilter2(&AvarageFilter_MPU6050_ACCEL_X, MPU6050_1.RegGroup_Data.ACCEL_Axis_X_Data))
+			MPU6050_1.FilteredValues.ACCEL_Axis_X_Filtered = AvarageFilter_MPU6050_ACCEL_X.Avarage;
+		if(!AvarageFilter2(&AvarageFilter_MPU6050_ACCEL_Y, MPU6050_1.RegGroup_Data.ACCEL_Axis_Y_Data))
+			MPU6050_1.FilteredValues.ACCEL_Axis_Y_Filtered = AvarageFilter_MPU6050_ACCEL_Y.Avarage;
+		if(!AvarageFilter2(&AvarageFilter_MPU6050_ACCEL_Z, MPU6050_1.RegGroup_Data.ACCEL_Axis_Z_Data))
+			MPU6050_1.FilteredValues.ACCEL_Axis_Z_Filtered = AvarageFilter_MPU6050_ACCEL_Z.Avarage;
+		if(!AvarageFilter2(&AvarageFilter_MPU6050_GYRO_X, MPU6050_1.RegGroup_Data.GYRO_Axis_X_Data))
+			MPU6050_1.FilteredValues.GYRO_Axis_X_Filtered = AvarageFilter_MPU6050_GYRO_X.Avarage;
+		if(!AvarageFilter2(&AvarageFilter_MPU6050_GYRO_Y, MPU6050_1.RegGroup_Data.GYRO_Axis_Y_Data))
+			MPU6050_1.FilteredValues.GYRO_Axis_Y_Filtered = AvarageFilter_MPU6050_GYRO_Y.Avarage;
+		if(!AvarageFilter2(&AvarageFilter_MPU6050_GYRO_Z, MPU6050_1.RegGroup_Data.GYRO_Axis_Z_Data))
+			MPU6050_1.FilteredValues.GYRO_Axis_Z_Filtered = AvarageFilter_MPU6050_GYRO_Z.Avarage;
+		MPU6050_MATH_Calculate_mG_Value(&MPU6050_1);
+  HAL_Delay(1);
+}
   /* USER CODE END 3 */
 }
 
@@ -207,7 +201,7 @@ static void MX_I2C2_Init(void)
 
   /* USER CODE END I2C2_Init 1 */
   hi2c2.Instance = I2C2;
-  hi2c2.Init.ClockSpeed = 100000;
+  hi2c2.Init.ClockSpeed = 400000;
   hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c2.Init.OwnAddress1 = 0;
   hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -280,8 +274,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : PE9 */
   GPIO_InitStruct.Pin = GPIO_PIN_9;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LD4_Pin LD3_Pin LD5_Pin LD6_Pin */

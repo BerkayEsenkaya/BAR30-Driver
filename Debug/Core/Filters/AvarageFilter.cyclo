@@ -1,2 +1,3 @@
 ../Core/Filters/AvarageFilter.c:12:6:AvarageFilter_Init	1
 ../Core/Filters/AvarageFilter.c:19:9:AvarageFilter	4
+../Core/Filters/AvarageFilter.c:40:9:AvarageFilter2	4

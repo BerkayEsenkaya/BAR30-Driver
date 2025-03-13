@@ -103,7 +103,7 @@ void I2C_WaitFlag(uint8_t I2CNo){
 	I2C_HandleTypeDef_T *i2c;
 	uint8_t i=0;
 	i2c = I2C_GetModule(I2CNo);
-	while((!i2c->flag) & (i<20)){
+	while((!i2c->flag) & (i<5)){
 		HAL_Delay(1);
 		i++;
 	}
