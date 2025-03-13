@@ -120,8 +120,9 @@ while (1)
 	if(MPU6050_1.dataReadyFlag){
 		MPU6050_1.dataReadyFlag = 0;
 		MPU6050_Read_ACCEL_Data(&MPU6050_1);
-	}
 		MPU6050_Read_GYRO_Data(&MPU6050_1);
+	}
+
 		if(!AvarageFilter2(&AvarageFilter_MPU6050_ACCEL_X, MPU6050_1.RegGroup_Data.ACCEL_Axis_X_Data))
 			MPU6050_1.FilteredValues.ACCEL_Axis_X_Filtered = AvarageFilter_MPU6050_ACCEL_X.Avarage;
 		if(!AvarageFilter2(&AvarageFilter_MPU6050_ACCEL_Y, MPU6050_1.RegGroup_Data.ACCEL_Axis_Y_Data))
@@ -134,7 +135,8 @@ while (1)
 			MPU6050_1.FilteredValues.GYRO_Axis_Y_Filtered = AvarageFilter_MPU6050_GYRO_Y.Avarage;
 		if(!AvarageFilter2(&AvarageFilter_MPU6050_GYRO_Z, MPU6050_1.RegGroup_Data.GYRO_Axis_Z_Data))
 			MPU6050_1.FilteredValues.GYRO_Axis_Z_Filtered = AvarageFilter_MPU6050_GYRO_Z.Avarage;
-		MPU6050_MATH_Calculate_mG_Value(&MPU6050_1);
+		MPU6050_MATH_Calculate_ACCEL_mG_Value(&MPU6050_1);
+		MPU6050_MATH_Calculate_GYRO_mG_Value(&MPU6050_1);
   HAL_Delay(1);
 }
   /* USER CODE END 3 */

@@ -1,2 +1,4 @@
-../Core/Sensors/MPU6050_Math.c:13:6:MPU6050_MATH_Calculate_mG_Value	1
-../Core/Sensors/MPU6050_Math.c:30:10:MPU6050_MATH_Get_LSB_Value	5
+../Core/Sensors/MPU6050_Math.c:14:6:MPU6050_MATH_Calculate_ACCEL_mG_Value	1
+../Core/Sensors/MPU6050_Math.c:31:10:MPU6050_MATH_Get_ACCEL_LSB_Value	5
+../Core/Sensors/MPU6050_Math.c:48:6:MPU6050_MATH_Calculate_GYRO_mG_Value	1
+../Core/Sensors/MPU6050_Math.c:65:10:MPU6050_MATH_Get_GYRO_LSB_Value	5

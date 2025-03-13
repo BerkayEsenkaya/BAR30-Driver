@@ -75,7 +75,7 @@
 #define MPU6050_DATA_TEMP_DISABLE (0x01<<3)
 #define MPU6050_DATA_CLK_INTERNAL (0x00)
 
-#define MPU6050_DATA_LP_WU_FREQUENCY_0 (0x00)
+#define MPU6050_DATA_LP_WU_FREQUENCY_1p2 (0x00)
 #define MPU6050_DATA_LP_WU_FREQUENCY_5 (0x01<<6)
 #define MPU6050_DATA_LP_WU_FREQUENCY_20 (0x02<<6)
 #define MPU6050_DATA_LP_WU_FREQUENCY_40 (0x03<<6)
@@ -133,9 +133,13 @@ typedef struct{
 }MPU6050_AvarageFilteredValue;
 
 typedef struct{
-	int16_t ACCEL_Axis_X_Mg;
-	int16_t ACCEL_Axis_Y_Mg;
-	int16_t ACCEL_Axis_Z_Mg;
+	int16_t ACCEL_Axis_X_mG;
+	int16_t ACCEL_Axis_Y_mG;
+	int16_t ACCEL_Axis_Z_mG;
+
+	int16_t GYRO_Axis_X_mDDS;
+	int16_t GYRO_Axis_Y_mDDS;
+	int16_t GYRO_Axis_Z_mDDS;
 }MPU6050_G_Values_T;
 
 typedef struct{
@@ -151,7 +155,7 @@ extern MPU6050_Sensor_T MPU6050_1;
 
 MPU6050_ReturnTypeDef_T MPU6050_DeviceReset(MPU6050_Sensor_T *handle);
 MPU6050_ReturnTypeDef_T MPU6050_DeviceSleep(MPU6050_Sensor_T *handle);
-MPU6050_ReturnTypeDef_T MPU6050_DeviceModeCycle(MPU6050_Sensor_T *handle);
+MPU6050_ReturnTypeDef_T MPU6050_DeviceModeLowPower(MPU6050_Sensor_T *handle);
 MPU6050_ReturnTypeDef_T MPU6050_Init(MPU6050_Sensor_T *handle, uint8_t I2C_No, uint8_t DevAddress);
 MPU6050_ReturnTypeDef_T MP6050_Get_WhoIAm_Data(MPU6050_Sensor_T *handle);
 MPU6050_ReturnTypeDef_T MPU6050_Set_SampleRateDivider(MPU6050_Sensor_T *handle, uint8_t divider);
@@ -163,7 +167,7 @@ MPU6050_ReturnTypeDef_T MPU6050_Read_ACCEL_Data(MPU6050_Sensor_T *handle);
 MPU6050_ReturnTypeDef_T MPU6050_Read_GYRO_Data(MPU6050_Sensor_T *handle);
 MPU6050_ReturnTypeDef_T MPU6050_Interrupt_Pin_Config(MPU6050_Sensor_T *handle, uint8_t data);
 MPU6050_ReturnTypeDef_T MPU6050_Interrupt_Config(MPU6050_Sensor_T *handle, uint8_t data);
-MPU6050_ReturnTypeDef_T MPU6050_AccelLowPowerMode(MPU6050_Sensor_T *handle, uint8_t LowPowerWakeUpFrequency);
+MPU6050_ReturnTypeDef_T MPU6050_Config_LowPowerMode(MPU6050_Sensor_T *handle, uint8_t LowPowerWakeUpFrequency, uint8_t ShutdownAxises);
 MPU6050_ReturnTypeDef_T MPU6050_Write(MPU6050_Sensor_T *handle, uint8_t Register, uint8_t Data);
 MPU6050_ReturnTypeDef_T MPU6050_Read(MPU6050_Sensor_T *handle, uint8_t Register, uint8_t *RxBuff);
 MPU6050_ReturnTypeDef_T MPU6050_MultiRead(MPU6050_Sensor_T *handle, uint8_t *TxBuff, uint8_t *RxBuff, uint8_t RxLenght);

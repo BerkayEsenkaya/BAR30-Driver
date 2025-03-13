@@ -36,7 +36,7 @@ MPU6050_ReturnTypeDef_T MPU6050_DeviceModeSleep(MPU6050_Sensor_T *handle){
 /** Brief description which ends at this dot. Details follow
  *  here.
  */
-MPU6050_ReturnTypeDef_T MPU6050_DeviceModeCycle(MPU6050_Sensor_T *handle){
+MPU6050_ReturnTypeDef_T MPU6050_DeviceModeLowPower(MPU6050_Sensor_T *handle){
 	return MPU6050_Write(handle, MPU6050_REGISTER_PWR_MGMT_1, MPU6050_DATA_DEVICE_CYCLE | MPU6050_DATA_TEMP_DISABLE);
 }
 
@@ -53,9 +53,9 @@ MPU6050_ReturnTypeDef_T MPU6050_DeviceModeNormal(MPU6050_Sensor_T *handle){
 MPU6050_ReturnTypeDef_T MPU6050_Init(MPU6050_Sensor_T *handle, uint8_t I2C_No, uint8_t DevAddress){
 	handle->devParam.I2C_No = I2C_No;
 	handle->devParam.DevAdress = DevAddress;
-	uint8_t rx[1];
 	while(MPU6050_DeviceReset(handle))
 		HAL_Delay(1);
+
 	HAL_Delay(10);
 	MPU6050_DeviceModeNormal(handle);
 	MPU6050_AllSignalPathReset(handle);
@@ -63,13 +63,13 @@ MPU6050_ReturnTypeDef_T MPU6050_Init(MPU6050_Sensor_T *handle, uint8_t I2C_No, u
     	MPU6050_Set_ConfigRegister(handle, MPU6050_DATA_SAMPLERATE_184, 0);
     	MPU6050_Interrupt_Pin_Config(handle, MPU6050_DATA_INT_LEVEL_ACTIVE_HIGH | MPU6050_DATA_INT_PUSHPULL | MPU6050_DATA_INT_LATCH_DISABLE | MPU6050_DATA_INT_OTO_CLEAR);
     	MPU6050_Interrupt_Config(handle, MPU6050_DATA_INT_DATA_RDY_ENABLE);
-    	MPU6050_Set_SampleRateDivider(handle, 0);
+    	MPU6050_Set_SampleRateDivider(handle, 19);
     	MPU6050_Select_FIFO_Members(handle, 0);
 		MPU6050_Set_GYROConfigRegister(handle, MPU6050_DATA_GYRO_SCALERANGE_250, 0);
 		MPU6050_Set_ACCELConfigRegister(handle, MPU6050_DATA_ACCEL_SCALERANGE_2, 0); //MPU6050_DATA_ACCEL_ST_XAXIS_ENABLED | MPU6050_DATA_ACCEL_ST_YAXIS_ENABLED | MPU6050_DATA_ACCEL_ST_ZAXIS_ENABLED);
 		HAL_Delay(10);
-//		MPU6050_DeviceModeCycle(handle);
-//		MPU6050_AccelLowPowerMode(handle, MPU6050_DATA_LP_WU_FREQUENCY_20);
+//		MPU6050_DeviceModeLowPower(handle);
+//		MPU6050_Config_LowPowerMode(handle, MPU6050_DATA_LP_WU_FREQUENCY_5, 0 );
 		return MPU6050_OK;
     }
     return MPU6050_ERROR;
@@ -179,8 +179,8 @@ MPU6050_ReturnTypeDef_T MPU6050_Interrupt_Config(MPU6050_Sensor_T *handle, uint8
 /** Brief description which ends at this dot. Details follow
  *  here.
  */
-MPU6050_ReturnTypeDef_T MPU6050_AccelLowPowerMode(MPU6050_Sensor_T *handle, uint8_t LowPowerWakeUpFrequency){
-	return MPU6050_Write(handle, MPU6050_REGISTER_PWR_MGMT_2 , LowPowerWakeUpFrequency | MPU6050_DATA_LP_GYRO_AXIS_X_GO_STANDBY | MPU6050_DATA_LP_GYRO_AXIS_Y_GO_STANDBY | MPU6050_DATA_LP_GYRO_AXIS_Z_GO_STANDBY);
+MPU6050_ReturnTypeDef_T MPU6050_Config_LowPowerMode(MPU6050_Sensor_T *handle, uint8_t LowPowerWakeUpFrequency, uint8_t ShutdownAxises){
+	return MPU6050_Write(handle, MPU6050_REGISTER_PWR_MGMT_2 , LowPowerWakeUpFrequency | ShutdownAxises);
 }
 
 /** Brief description which ends at this dot. Details follow

@@ -1,9 +1,9 @@
 ../Core/Sensors/MPU6050.c:18:25:MPU6050_DeviceReset	16	static
 ../Core/Sensors/MPU6050.c:25:25:MPU6050_AllSignalPathReset	16	static
 ../Core/Sensors/MPU6050.c:32:25:MPU6050_DeviceModeSleep	16	static
-../Core/Sensors/MPU6050.c:39:25:MPU6050_DeviceModeCycle	16	static
+../Core/Sensors/MPU6050.c:39:25:MPU6050_DeviceModeLowPower	16	static
 ../Core/Sensors/MPU6050.c:46:25:MPU6050_DeviceModeNormal	16	static
-../Core/Sensors/MPU6050.c:53:25:MPU6050_Init	24	static
+../Core/Sensors/MPU6050.c:53:25:MPU6050_Init	16	static
 ../Core/Sensors/MPU6050.c:81:25:MP6050_Get_WhoIAm_Data	24	static
 ../Core/Sensors/MPU6050.c:92:25:MPU6050_Set_SampleRateDivider	16	static
 ../Core/Sensors/MPU6050.c:99:25:MPU6050_Set_ConfigRegister	16	static
@@ -14,7 +14,7 @@
 ../Core/Sensors/MPU6050.c:149:25:MPU6050_Read_GYRO_Data	24	static
 ../Core/Sensors/MPU6050.c:168:25:MPU6050_Interrupt_Pin_Config	16	static
 ../Core/Sensors/MPU6050.c:175:25:MPU6050_Interrupt_Config	16	static
-../Core/Sensors/MPU6050.c:182:25:MPU6050_AccelLowPowerMode	16	static
+../Core/Sensors/MPU6050.c:182:25:MPU6050_Config_LowPowerMode	16	static
 ../Core/Sensors/MPU6050.c:189:25:MPU6050_Write	32	static
 ../Core/Sensors/MPU6050.c:204:25:MPU6050_Read	40	static
 ../Core/Sensors/MPU6050.c:219:25:MPU6050_MultiRead	40	static
