@@ -1,5 +1,5 @@
-
-#define BAR30_COMMAND_RESET (0x1E)
+#define BAR30_DEVICE_ADDRESS (0x76)
+#define BAR30_COMMAND_RESET (0x78)
 #define BAR30_COMMAND_START_PRESSURE_CONVERT_WITH_OSR_256 (0x40)
 #define BAR30_COMMAND_START_PRESSURE_CONVERT_WITH_OSR_512 (0x42)
 #define BAR30_COMMAND_START_PRESSURE_CONVERT_WITH_OSR_1024 (0x44)
@@ -30,8 +30,7 @@ typedef enum{
 
 typedef struct{
 	uint8_t I2C_No;
-	uint8_t TxDevAdress;
-	uint8_t RxDevAdress;
+	uint8_t DevAdress;
 }BAR30_DeviceParam_T;
 
 typedef struct{

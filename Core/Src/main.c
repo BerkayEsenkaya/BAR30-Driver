@@ -17,8 +17,11 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include <string.h>
+#include <stdint.h>
 #include "main.h"
-
+#include "usb_device.h"
+#include "usbd_cdc_if.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "I2C.h"
@@ -62,7 +65,8 @@ static void MX_I2C2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+char AccelBuffer[128], GyroBuffer[128], bufferAX[10], bufferAY[10], bufferAZ[10], bufferGX[10], bufferGY[10], bufferGZ[10];
+int16_t buffer;
 /* USER CODE END 0 */
 
 /**
@@ -73,6 +77,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+
 
   /* USER CODE END 1 */
 
@@ -96,6 +101,7 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_I2C2_Init();
+  MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
 //  while(BAR30_Init(&BAR30_1, 2, 0x76));
 
@@ -103,15 +109,18 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  MPU6050_Init(&MPU6050_1, I2CNO_2, MPU6050_DEVICE_ADDRESS);
+//  BAR30_Init(&BAR30_1, 2, (0x76<<1));
+//  HAL_Delay(5);
+//  BAR30_Reset(&BAR30_1);
+  MPU6050_Init(&MPU6050_1, I2CNO_2, (MPU6050_DEVICE_ADDRESS));
   HAL_Delay(100);
+
   AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_X, 5);
   AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_Y, 5);
   AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_Z, 5);
   AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_X, 5);
   AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_Y, 5);
   AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_Z, 5);
-
 while (1)
 {
     /* USER CODE END WHILE */
@@ -137,7 +146,19 @@ while (1)
 			MPU6050_1.FilteredValues.GYRO_Axis_Z_Filtered = AvarageFilter_MPU6050_GYRO_Z.Avarage;
 		MPU6050_MATH_Calculate_ACCEL_mG_Value(&MPU6050_1);
 		MPU6050_MATH_Calculate_GYRO_mG_Value(&MPU6050_1);
-  HAL_Delay(1);
+
+//		itoa(buffer, AccelBuffer, 10);
+
+		itoa(MPU6050_1.CalculatedValues.ACCEL_Axis_X_mG, bufferAX, 10);
+		itoa(MPU6050_1.CalculatedValues.ACCEL_Axis_Y_mG, bufferAY, 10);
+		itoa(MPU6050_1.CalculatedValues.ACCEL_Axis_Z_mG, bufferAZ, 10);
+		itoa(MPU6050_1.CalculatedValues.GYRO_Axis_X_mDDS , bufferGX, 10);
+		itoa(MPU6050_1.CalculatedValues.GYRO_Axis_Y_mDDS, bufferGY, 10);
+		itoa(MPU6050_1.CalculatedValues.GYRO_Axis_Z_mDDS, bufferGZ, 10);
+		sprintf(AccelBuffer, "ACC X : [%s]  ACC Y : [%s]  ACC Z :[ %s]     GYRO X : [%s]  GYRO Y : [%s]  GYRO Z :[ %s]\r\n", bufferAX, bufferAY, bufferAZ, bufferGX, bufferGY, bufferGZ);
+
+		CDC_Transmit_FS(AccelBuffer, strlen((char*)AccelBuffer));
+  HAL_Delay(5);
 }
   /* USER CODE END 3 */
 }
@@ -286,12 +307,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PA11 */
-  GPIO_InitStruct.Pin = GPIO_PIN_11;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);

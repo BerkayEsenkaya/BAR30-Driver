@@ -1,8 +1,8 @@
 ../Core/Sensors/BAR30.c:19:23:BAR30_Init	16	static
-../Core/Sensors/BAR30.c:29:23:BAR30_Reset	32	static
-../Core/Sensors/BAR30.c:44:23:BAR30_StartPressureConversion	16	static
-../Core/Sensors/BAR30.c:51:23:BAR30_ReadPressure	24	static
-../Core/Sensors/BAR30.c:62:23:BAR30_Get_AllPromData	40	static
-../Core/Sensors/BAR30.c:107:23:BAR30_Write	32	static
-../Core/Sensors/BAR30.c:116:23:BAR30_Read	40	static
-../Core/Sensors/BAR30.c:125:23:BAR30_SendReceive	32	static
+../Core/Sensors/BAR30.c:28:23:BAR30_Reset	16	static
+../Core/Sensors/BAR30.c:38:23:BAR30_StartPressureConversion	16	static
+../Core/Sensors/BAR30.c:45:23:BAR30_ReadPressure	24	static
+../Core/Sensors/BAR30.c:56:23:BAR30_Get_AllPromData	24	static
+../Core/Sensors/BAR30.c:111:23:BAR30_Write	32	static
+../Core/Sensors/BAR30.c:120:23:BAR30_Read	40	static
+../Core/Sensors/BAR30.c:129:23:BAR30_SendReceive	32	static
