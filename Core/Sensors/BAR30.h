@@ -1,4 +1,4 @@
-#define BAR30_DEVICE_ADDRESS (0x76)
+#define BAR30_DEVICE_ADDRESS (0x40)
 #define BAR30_COMMAND_RESET (0x78)
 #define BAR30_COMMAND_START_PRESSURE_CONVERT_WITH_OSR_256 (0x40)
 #define BAR30_COMMAND_START_PRESSURE_CONVERT_WITH_OSR_512 (0x42)
@@ -12,14 +12,15 @@
 #define BAR30_COMMAND_START_TEMPERATURE_CONVERT_WITH_OSR_2048 (0x56)
 #define BAR30_COMMAND_START_TEMPERATURE_CONVERT_WITH_OSR_4096 (0x58)
 #define BAR30_COMMAND_START_TEMPERATURE_CONVERT_WITH_OSR_8192 (0x5A)
-#define BAR30_COMAND_ADC_READ (0x00)
-#define BAR30_COMAND_PROM_READ_1 (0xA0)
-#define BAR30_COMAND_PROM_READ_2 (0xA2)
-#define BAR30_COMAND_PROM_READ_3 (0xA4)
-#define BAR30_COMAND_PROM_READ_4 (0xA6)
-#define BAR30_COMAND_PROM_READ_5 (0xA8)
-#define BAR30_COMAND_PROM_READ_6 (0xAA)
-#define BAR30_COMAND_PROM_READ_7 (0xAC)
+#define BAR30_COMMAND_ADC_READ (0x00)
+#define BAR30_COMMAND_PROM_READ_1 (0xA0)
+#define BAR30_COMMAND_PROM_READ_2 (0xA2)
+#define BAR30_COMMAND_PROM_READ_3 (0xA4)
+#define BAR30_COMMAND_PROM_READ_4 (0xA6)
+#define BAR30_COMMAND_PROM_READ_5 (0xA8)
+#define BAR30_COMMAND_PROM_READ_6 (0xAA)
+#define BAR30_COMMAND_PROM_READ_7 (0xAC)
+
 
 #define BAR30_INCORRECTED_DATA 9999
 
@@ -40,6 +41,7 @@ typedef struct{
 	volatile uint32_t PressureData;
 }BAR30_Sensor_T;
 
+extern BAR30_Sensor_T BAR30_1, BAR30_2, BAR30_3;
 
 BAR30_ReturnTypeDef_T BAR30_Init(BAR30_Sensor_T *handle, uint8_t i2cNo, uint8_t devI2CAddress);
 BAR30_ReturnTypeDef_T BAR30_Reset(BAR30_Sensor_T *handle);
@@ -47,5 +49,6 @@ BAR30_ReturnTypeDef_T BAR30_Write(BAR30_Sensor_T *handle, uint8_t command);
 BAR30_ReturnTypeDef_T BAR30_Read(BAR30_Sensor_T *handle, uint8_t command, uint8_t *data);
 BAR30_ReturnTypeDef_T BAR30_SendReceive(BAR30_Sensor_T *handle, uint8_t *txBuff, uint8_t txLenght, uint8_t *rxBuff, uint8_t rxLenght);
 BAR30_ReturnTypeDef_T BAR30_Get_AllPromData(BAR30_Sensor_T *handle);
-
-extern BAR30_Sensor_T BAR30_1, BAR30_2, BAR30_3;
+BAR30_ReturnTypeDef_T BAR30_ReadPressure(BAR30_Sensor_T *handle);
+BAR30_ReturnTypeDef_T BAR30_StartPressureConversion(BAR30_Sensor_T *handle);
+BAR30_ReturnTypeDef_T BAR30_ReadMeasData(BAR30_Sensor_T *handle, uint8_t command, uint8_t *buffer);

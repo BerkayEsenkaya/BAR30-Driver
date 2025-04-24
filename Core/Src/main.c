@@ -17,11 +17,9 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include <string.h>
-#include <stdint.h>
 #include "main.h"
 #include "usb_device.h"
-#include "usbd_cdc_if.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "I2C.h"
@@ -47,9 +45,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-I2C_HandleTypeDef hi2c2;
-DMA_HandleTypeDef hdma_i2c2_rx;
-DMA_HandleTypeDef hdma_i2c2_tx;
+I2C_HandleTypeDef hi2c3;
 
 /* USER CODE BEGIN PV */
 /* USER CODE END PV */
@@ -57,8 +53,7 @@ DMA_HandleTypeDef hdma_i2c2_tx;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_DMA_Init(void);
-static void MX_I2C2_Init(void);
+static void MX_I2C3_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -66,7 +61,8 @@ static void MX_I2C2_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 char AccelBuffer[128], GyroBuffer[128], bufferAX[10], bufferAY[10], bufferAZ[10], bufferGX[10], bufferGY[10], bufferGZ[10];
-int16_t buffer;
+uint16_t Txbuffer[1], RxBuffer[2];
+
 /* USER CODE END 0 */
 
 /**
@@ -99,9 +95,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
-  MX_I2C2_Init();
   MX_USB_DEVICE_Init();
+  MX_I2C3_Init();
   /* USER CODE BEGIN 2 */
 //  while(BAR30_Init(&BAR30_1, 2, 0x76));
 
@@ -109,56 +104,93 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-//  BAR30_Init(&BAR30_1, 2, (0x76<<1));
-//  HAL_Delay(5);
-//  BAR30_Reset(&BAR30_1);
-  MPU6050_Init(&MPU6050_1, I2CNO_2, (MPU6050_DEVICE_ADDRESS));
-  HAL_Delay(100);
 
-  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_X, 5);
-  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_Y, 5);
-  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_Z, 5);
-  AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_X, 5);
-  AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_Y, 5);
-  AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_Z, 5);
+
+
+  BAR30_Init(&BAR30_1, I2CNO_3, (0x40));
+//  Txbuffer[0] = BAR30_COMMAND_RESET;
+//  HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
+//  HAL_Delay(100);
+//  Txbuffer[0] = BAR30_COMMAND_START_PRESSURE_CONVERT_WITH_OSR_1024;
+//  HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
+//  HAL_Delay(100);
+//
+//  Txbuffer[0] = BAR30_COMAND_PROM_READ_1;
+//  HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
+//  HAL_I2C_Master_Receive(&hi2c3, 0x40, RxBuffer, 2, 100);
+//  Txbuffer[0] = BAR30_COMAND_PROM_READ_2;
+//  HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
+//  HAL_I2C_Master_Receive(&hi2c3, 0x40, RxBuffer, 2, 100);
+//  Txbuffer[0] = BAR30_COMAND_PROM_READ_3;
+//    HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
+//    HAL_I2C_Master_Receive(&hi2c3, 0x40, RxBuffer, 2, 100);
+//    Txbuffer[0] = BAR30_COMAND_PROM_READ_4;
+//      HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
+//      HAL_I2C_Master_Receive(&hi2c3, 0x40, RxBuffer, 2, 100);
+//      Txbuffer[0] = BAR30_COMAND_PROM_READ_5;
+//        HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
+//        HAL_I2C_Master_Receive(&hi2c3, 0x40, RxBuffer, 2, 100);
+//        Txbuffer[0] = BAR30_COMAND_PROM_READ_6;
+//          HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
+//          HAL_I2C_Master_Receive(&hi2c3, 0x40, RxBuffer, 2, 100);
+//          Txbuffer[0] = BAR30_COMAND_PROM_READ_7;
+//            HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
+//            HAL_I2C_Master_Receive(&hi2c3, 0x40, RxBuffer, 2, 100);
+  HAL_Delay(50);
+  BAR30_Reset(&BAR30_1);
+  HAL_Delay(50);
+//  BAR30_StartPressureConversion(&BAR30_1);
+//  MPU6050_Init(&MPU6050_1, I2CNO_2, (MPU6050_DEVICE_ADDRESS));
+//  HAL_Delay(100);
+//
+//  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_X, 5);
+//  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_Y, 5);
+//  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_Z, 5);
+//  AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_X, 5);
+//  AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_Y, 5);
+//  AvarageFilter_Init(&AvarageFilter_MPU6050_GYRO_Z, 5);
 while (1)
 {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	if(MPU6050_1.dataReadyFlag){
-		MPU6050_1.dataReadyFlag = 0;
-		MPU6050_Read_ACCEL_Data(&MPU6050_1);
-		MPU6050_Read_GYRO_Data(&MPU6050_1);
-	}
-
-		if(!AvarageFilter2(&AvarageFilter_MPU6050_ACCEL_X, MPU6050_1.RegGroup_Data.ACCEL_Axis_X_Data))
-			MPU6050_1.FilteredValues.ACCEL_Axis_X_Filtered = AvarageFilter_MPU6050_ACCEL_X.Avarage;
-		if(!AvarageFilter2(&AvarageFilter_MPU6050_ACCEL_Y, MPU6050_1.RegGroup_Data.ACCEL_Axis_Y_Data))
-			MPU6050_1.FilteredValues.ACCEL_Axis_Y_Filtered = AvarageFilter_MPU6050_ACCEL_Y.Avarage;
-		if(!AvarageFilter2(&AvarageFilter_MPU6050_ACCEL_Z, MPU6050_1.RegGroup_Data.ACCEL_Axis_Z_Data))
-			MPU6050_1.FilteredValues.ACCEL_Axis_Z_Filtered = AvarageFilter_MPU6050_ACCEL_Z.Avarage;
-		if(!AvarageFilter2(&AvarageFilter_MPU6050_GYRO_X, MPU6050_1.RegGroup_Data.GYRO_Axis_X_Data))
-			MPU6050_1.FilteredValues.GYRO_Axis_X_Filtered = AvarageFilter_MPU6050_GYRO_X.Avarage;
-		if(!AvarageFilter2(&AvarageFilter_MPU6050_GYRO_Y, MPU6050_1.RegGroup_Data.GYRO_Axis_Y_Data))
-			MPU6050_1.FilteredValues.GYRO_Axis_Y_Filtered = AvarageFilter_MPU6050_GYRO_Y.Avarage;
-		if(!AvarageFilter2(&AvarageFilter_MPU6050_GYRO_Z, MPU6050_1.RegGroup_Data.GYRO_Axis_Z_Data))
-			MPU6050_1.FilteredValues.GYRO_Axis_Z_Filtered = AvarageFilter_MPU6050_GYRO_Z.Avarage;
-		MPU6050_MATH_Calculate_ACCEL_mG_Value(&MPU6050_1);
-		MPU6050_MATH_Calculate_GYRO_mG_Value(&MPU6050_1);
-
-//		itoa(buffer, AccelBuffer, 10);
-
-		itoa(MPU6050_1.CalculatedValues.ACCEL_Axis_X_mG, bufferAX, 10);
-		itoa(MPU6050_1.CalculatedValues.ACCEL_Axis_Y_mG, bufferAY, 10);
-		itoa(MPU6050_1.CalculatedValues.ACCEL_Axis_Z_mG, bufferAZ, 10);
-		itoa(MPU6050_1.CalculatedValues.GYRO_Axis_X_mDDS , bufferGX, 10);
-		itoa(MPU6050_1.CalculatedValues.GYRO_Axis_Y_mDDS, bufferGY, 10);
-		itoa(MPU6050_1.CalculatedValues.GYRO_Axis_Z_mDDS, bufferGZ, 10);
-		sprintf(AccelBuffer, "ACC X : [%s]  ACC Y : [%s]  ACC Z :[ %s]     GYRO X : [%s]  GYRO Y : [%s]  GYRO Z :[ %s]\r\n", bufferAX, bufferAY, bufferAZ, bufferGX, bufferGY, bufferGZ);
-
-		CDC_Transmit_FS(AccelBuffer, strlen((char*)AccelBuffer));
-  HAL_Delay(5);
+	BAR30_Get_AllPromData(&BAR30_1);
+	BAR30_StartPressureConversion(&BAR30_1);
+	HAL_Delay(100);
+	BAR30_ReadPressure(&BAR30_1);
+//	if(MPU6050_1.dataReadyFlag){
+//		MPU6050_1.dataReadyFlag = 0;
+//		MPU6050_Read_ACCEL_Data(&MPU6050_1);
+//		MPU6050_Read_GYRO_Data(&MPU6050_1);
+//	}
+//
+//		if(!AvarageFilter2(&AvarageFilter_MPU6050_ACCEL_X, MPU6050_1.RegGroup_Data.ACCEL_Axis_X_Data))
+//			MPU6050_1.FilteredValues.ACCEL_Axis_X_Filtered = AvarageFilter_MPU6050_ACCEL_X.Avarage;
+//		if(!AvarageFilter2(&AvarageFilter_MPU6050_ACCEL_Y, MPU6050_1.RegGroup_Data.ACCEL_Axis_Y_Data))
+//			MPU6050_1.FilteredValues.ACCEL_Axis_Y_Filtered = AvarageFilter_MPU6050_ACCEL_Y.Avarage;
+//		if(!AvarageFilter2(&AvarageFilter_MPU6050_ACCEL_Z, MPU6050_1.RegGroup_Data.ACCEL_Axis_Z_Data))
+//			MPU6050_1.FilteredValues.ACCEL_Axis_Z_Filtered = AvarageFilter_MPU6050_ACCEL_Z.Avarage;
+//		if(!AvarageFilter2(&AvarageFilter_MPU6050_GYRO_X, MPU6050_1.RegGroup_Data.GYRO_Axis_X_Data))
+//			MPU6050_1.FilteredValues.GYRO_Axis_X_Filtered = AvarageFilter_MPU6050_GYRO_X.Avarage;
+//		if(!AvarageFilter2(&AvarageFilter_MPU6050_GYRO_Y, MPU6050_1.RegGroup_Data.GYRO_Axis_Y_Data))
+//			MPU6050_1.FilteredValues.GYRO_Axis_Y_Filtered = AvarageFilter_MPU6050_GYRO_Y.Avarage;
+//		if(!AvarageFilter2(&AvarageFilter_MPU6050_GYRO_Z, MPU6050_1.RegGroup_Data.GYRO_Axis_Z_Data))
+//			MPU6050_1.FilteredValues.GYRO_Axis_Z_Filtered = AvarageFilter_MPU6050_GYRO_Z.Avarage;
+//		MPU6050_MATH_Calculate_ACCEL_mG_Value(&MPU6050_1);
+//		MPU6050_MATH_Calculate_GYRO_mG_Value(&MPU6050_1);
+//
+////		itoa(buffer, AccelBuffer, 10);
+//
+//		itoa(MPU6050_1.CalculatedValues.ACCEL_Axis_X_mG, bufferAX, 10);
+//		itoa(MPU6050_1.CalculatedValues.ACCEL_Axis_Y_mG, bufferAY, 10);
+//		itoa(MPU6050_1.CalculatedValues.ACCEL_Axis_Z_mG, bufferAZ, 10);
+//		itoa(MPU6050_1.CalculatedValues.GYRO_Axis_X_mDDS , bufferGX, 10);
+//		itoa(MPU6050_1.CalculatedValues.GYRO_Axis_Y_mDDS, bufferGY, 10);
+//		itoa(MPU6050_1.CalculatedValues.GYRO_Axis_Z_mDDS, bufferGZ, 10);
+//		sprintf(AccelBuffer, "ACC X : [%s]  ACC Y : [%s]  ACC Z :[ %s]     GYRO X : [%s]  GYRO Y : [%s]  GYRO Z :[ %s]\r\n", bufferAX, bufferAY, bufferAZ, bufferGX, bufferGY, bufferGZ);
+//
+//		CDC_Transmit_FS(AccelBuffer, strlen((char*)AccelBuffer));
+//  HAL_Delay(5);
 }
   /* USER CODE END 3 */
 }
@@ -209,55 +241,36 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief I2C2 Initialization Function
+  * @brief I2C3 Initialization Function
   * @param None
   * @retval None
   */
-static void MX_I2C2_Init(void)
+static void MX_I2C3_Init(void)
 {
 
-  /* USER CODE BEGIN I2C2_Init 0 */
+  /* USER CODE BEGIN I2C3_Init 0 */
 
-  /* USER CODE END I2C2_Init 0 */
+  /* USER CODE END I2C3_Init 0 */
 
-  /* USER CODE BEGIN I2C2_Init 1 */
+  /* USER CODE BEGIN I2C3_Init 1 */
 
-  /* USER CODE END I2C2_Init 1 */
-  hi2c2.Instance = I2C2;
-  hi2c2.Init.ClockSpeed = 400000;
-  hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c2.Init.OwnAddress1 = 0;
-  hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c2.Init.OwnAddress2 = 0;
-  hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c2) != HAL_OK)
+  /* USER CODE END I2C3_Init 1 */
+  hi2c3.Instance = I2C3;
+  hi2c3.Init.ClockSpeed = 100000;
+  hi2c3.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c3.Init.OwnAddress1 = 0;
+  hi2c3.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c3.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c3.Init.OwnAddress2 = 0;
+  hi2c3.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c3.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c3) != HAL_OK)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN I2C2_Init 2 */
-  I2C_Init(&hi2c2, 2);
-  /* USER CODE END I2C2_Init 2 */
-
-}
-
-/**
-  * Enable DMA controller clock
-  */
-static void MX_DMA_Init(void)
-{
-
-  /* DMA controller clock enable */
-  __HAL_RCC_DMA1_CLK_ENABLE();
-
-  /* DMA interrupt init */
-  /* DMA1_Stream2_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Stream2_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Stream2_IRQn);
-  /* DMA1_Stream7_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Stream7_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Stream7_IRQn);
+  /* USER CODE BEGIN I2C3_Init 2 */
+  I2C_Init(&hi2c3, I2CNO_3);
+  /* USER CODE END I2C3_Init 2 */
 
 }
 

@@ -30,13 +30,17 @@ void I2C_Init(void *handle, uint8_t I2CNo){
 I2C_ReturnTypeDef_T I2C_ReadWrite_Poll(uint8_t I2CNo, uint8_t DevAddress, uint8_t *txBuff, uint8_t txLenght, uint8_t *rxBuff, uint8_t rxLenght){
 	I2C_HandleTypeDef_T *i2c;
 	HAL_StatusTypeDef res;
+	uint8_t txAddr, rxAddr;
+	txAddr = DevAddress<<1;
+	rxAddr = ((DevAddress<<1) | 0x01);
 	i2c = I2C_GetModule(I2CNo);
 	if(rxLenght == 0){
-		res = HAL_I2C_Master_Transmit(i2c->handle , DevAddress, txBuff, txLenght,300);
+		res = HAL_I2C_Master_Transmit(i2c->handle , txAddr, txBuff, txLenght,300);
 		return res == I2C_ERROR;
 	}else{
-		HAL_I2C_Master_Transmit(i2c->handle , DevAddress, txBuff, txLenght,300);
-		res = HAL_I2C_Master_Receive(i2c->handle, DevAddress, rxBuff, rxLenght,300);
+		HAL_I2C_Master_Transmit(i2c->handle , txAddr, txBuff, txLenght,300);
+		HAL_Delay(2);
+		res = HAL_I2C_Master_Receive(i2c->handle, rxAddr, rxBuff, rxLenght,300);
 		return res == I2C_ERROR;
 	}
 }
