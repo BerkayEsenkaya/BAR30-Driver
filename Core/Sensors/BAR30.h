@@ -1,26 +1,15 @@
 #define BAR30_DEVICE_ADDRESS (0x40)
-#define BAR30_COMMAND_RESET (0x78)
-#define BAR30_COMMAND_START_PRESSURE_CONVERT_WITH_OSR_256 (0x40)
-#define BAR30_COMMAND_START_PRESSURE_CONVERT_WITH_OSR_512 (0x42)
-#define BAR30_COMMAND_START_PRESSURE_CONVERT_WITH_OSR_1024 (0x44)
-#define BAR30_COMMAND_START_PRESSURE_CONVERT_WITH_OSR_2048 (0x46)
-#define BAR30_COMMAND_START_PRESSURE_CONVERT_WITH_OSR_4096 (0x48)
-#define BAR30_COMMAND_START_PRESSURE_CONVERT_WITH_OSR_8192 (0x4A)
-#define BAR30_COMMAND_START_TEMPERATURE_CONVERT_WITH_OSR_256 (0x50)
-#define BAR30_COMMAND_START_TEMPERATURE_CONVERT_WITH_OSR_512 (0x52)
-#define BAR30_COMMAND_START_TEMPERATURE_CONVERT_WITH_OSR_1024 (0x54)
-#define BAR30_COMMAND_START_TEMPERATURE_CONVERT_WITH_OSR_2048 (0x56)
-#define BAR30_COMMAND_START_TEMPERATURE_CONVERT_WITH_OSR_4096 (0x58)
-#define BAR30_COMMAND_START_TEMPERATURE_CONVERT_WITH_OSR_8192 (0x5A)
-#define BAR30_COMMAND_ADC_READ (0x00)
-#define BAR30_COMMAND_PROM_READ_1 (0xA0)
-#define BAR30_COMMAND_PROM_READ_2 (0xA2)
-#define BAR30_COMMAND_PROM_READ_3 (0xA4)
-#define BAR30_COMMAND_PROM_READ_4 (0xA6)
-#define BAR30_COMMAND_PROM_READ_5 (0xA8)
-#define BAR30_COMMAND_PROM_READ_6 (0xAA)
-#define BAR30_COMMAND_PROM_READ_7 (0xAC)
 
+#define BAR30_MTP_ADDRESS_CUST_ID_0 (0x00)
+#define BAR30_MTP_ADDRESS_CUST_ID_1 (0x01)
+#define BAR30_MTP_ADDRESS_SCALING_BASE (0x12)
+#define BAR30_MTP_ADDRESS_SCALING_1 (0x13)
+#define BAR30_MTP_ADDRESS_SCALING_2 (0x14)
+#define BAR30_MTP_ADDRESS_SCALING_3 (0x15)
+#define BAR30_MTP_ADDRESS_SCALING_4 (0x16)
+
+#define BAR30_COMMAND_START_CONVERSION (0xA0)
+#define BAR30_COMMAND_READ_CONVERSION_DATA (0xAC)
 
 #define BAR30_INCORRECTED_DATA 9999
 
@@ -29,6 +18,12 @@ typedef enum{
 	BAR30_ERROR,
 }BAR30_ReturnTypeDef_T;
 
+typedef enum{
+	Zero_At_Atm,
+	Zero_At_1Bar,
+	Zero_At_Vacuum,
+}BAR30_Mode_T;
+
 typedef struct{
 	uint8_t I2C_No;
 	uint8_t DevAdress;
@@ -36,9 +31,15 @@ typedef struct{
 
 typedef struct{
 	BAR30_DeviceParam_T devParam;
-	volatile uint16_t PromData[7];
-	volatile uint32_t TempData;
-	volatile uint32_t PressureData;
+	uint16_t PromData[10];
+	uint32_t Temperature_RawData;
+	uint32_t Pressure_RawData;
+	uint16_t miliCelcius;
+	uint16_t miliPressure;
+	uint16_t producttype;
+	uint32_t PMax;
+	uint32_t PMin;
+	BAR30_Mode_T mode;
 }BAR30_Sensor_T;
 
 extern BAR30_Sensor_T BAR30_1, BAR30_2, BAR30_3;
@@ -50,5 +51,9 @@ BAR30_ReturnTypeDef_T BAR30_Read(BAR30_Sensor_T *handle, uint8_t command, uint8_
 BAR30_ReturnTypeDef_T BAR30_SendReceive(BAR30_Sensor_T *handle, uint8_t *txBuff, uint8_t txLenght, uint8_t *rxBuff, uint8_t rxLenght);
 BAR30_ReturnTypeDef_T BAR30_Get_AllPromData(BAR30_Sensor_T *handle);
 BAR30_ReturnTypeDef_T BAR30_ReadPressure(BAR30_Sensor_T *handle);
+BAR30_ReturnTypeDef_T BAR30_ReadTemperature(BAR30_Sensor_T *handle);
 BAR30_ReturnTypeDef_T BAR30_StartPressureConversion(BAR30_Sensor_T *handle);
+BAR30_ReturnTypeDef_T BAR30_StartTemperatureConversion(BAR30_Sensor_T *handle);
 BAR30_ReturnTypeDef_T BAR30_ReadMeasData(BAR30_Sensor_T *handle, uint8_t command, uint8_t *buffer);
+BAR30_ReturnTypeDef_T BAR30_Get_CustIds(BAR30_Sensor_T *handle);
+BAR30_ReturnTypeDef_T BAR30_Get_ScalingValues(BAR30_Sensor_T *handle);

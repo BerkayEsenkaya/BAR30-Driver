@@ -39,7 +39,7 @@ I2C_ReturnTypeDef_T I2C_ReadWrite_Poll(uint8_t I2CNo, uint8_t DevAddress, uint8_
 		return res == I2C_ERROR;
 	}else{
 		HAL_I2C_Master_Transmit(i2c->handle , txAddr, txBuff, txLenght,300);
-		HAL_Delay(2);
+		HAL_Delay(10);
 		res = HAL_I2C_Master_Receive(i2c->handle, rxAddr, rxBuff, rxLenght,300);
 		return res == I2C_ERROR;
 	}

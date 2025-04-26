@@ -105,44 +105,17 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-
-
   BAR30_Init(&BAR30_1, I2CNO_3, (0x40));
-//  Txbuffer[0] = BAR30_COMMAND_RESET;
-//  HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
+
+  BAR30_Get_ScalingValues(&BAR30_1);
 //  HAL_Delay(100);
-//  Txbuffer[0] = BAR30_COMMAND_START_PRESSURE_CONVERT_WITH_OSR_1024;
-//  HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
+//  while(BAR30_Reset(&BAR30_1) != BAR30_OK ){
+//	  HAL_Delay(2);
+//  }
+////  MPU6050_Init(&MPU6050_1, I2CNO_2, (MPU6050_DEVICE_ADDRESS));
+////  HAL_Delay(100);
+//  BAR30_Get_AllPromData(&BAR30_1);
 //  HAL_Delay(100);
-//
-//  Txbuffer[0] = BAR30_COMAND_PROM_READ_1;
-//  HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
-//  HAL_I2C_Master_Receive(&hi2c3, 0x40, RxBuffer, 2, 100);
-//  Txbuffer[0] = BAR30_COMAND_PROM_READ_2;
-//  HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
-//  HAL_I2C_Master_Receive(&hi2c3, 0x40, RxBuffer, 2, 100);
-//  Txbuffer[0] = BAR30_COMAND_PROM_READ_3;
-//    HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
-//    HAL_I2C_Master_Receive(&hi2c3, 0x40, RxBuffer, 2, 100);
-//    Txbuffer[0] = BAR30_COMAND_PROM_READ_4;
-//      HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
-//      HAL_I2C_Master_Receive(&hi2c3, 0x40, RxBuffer, 2, 100);
-//      Txbuffer[0] = BAR30_COMAND_PROM_READ_5;
-//        HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
-//        HAL_I2C_Master_Receive(&hi2c3, 0x40, RxBuffer, 2, 100);
-//        Txbuffer[0] = BAR30_COMAND_PROM_READ_6;
-//          HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
-//          HAL_I2C_Master_Receive(&hi2c3, 0x40, RxBuffer, 2, 100);
-//          Txbuffer[0] = BAR30_COMAND_PROM_READ_7;
-//            HAL_I2C_Master_Transmit(&hi2c3, 0x40, Txbuffer, 1, 100);
-//            HAL_I2C_Master_Receive(&hi2c3, 0x40, RxBuffer, 2, 100);
-  HAL_Delay(50);
-  BAR30_Reset(&BAR30_1);
-  HAL_Delay(50);
-//  BAR30_StartPressureConversion(&BAR30_1);
-//  MPU6050_Init(&MPU6050_1, I2CNO_2, (MPU6050_DEVICE_ADDRESS));
-//  HAL_Delay(100);
-//
 //  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_X, 5);
 //  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_Y, 5);
 //  AvarageFilter_Init(&AvarageFilter_MPU6050_ACCEL_Z, 5);
@@ -154,11 +127,16 @@ while (1)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	BAR30_Get_AllPromData(&BAR30_1);
+
 	BAR30_StartPressureConversion(&BAR30_1);
-	HAL_Delay(100);
+	HAL_Delay(25);
 	BAR30_ReadPressure(&BAR30_1);
-//	if(MPU6050_1.dataReadyFlag){
+	HAL_Delay(25);
+//	BAR30_StartTemperatureConversion(&BAR30_1);
+//	HAL_Delay(100);
+//	BAR30_ReadTemperature(&BAR30_1);
+//	HAL_Delay(10);
+//	if(MPU6050_1dataReadyFlag){
 //		MPU6050_1.dataReadyFlag = 0;
 //		MPU6050_Read_ACCEL_Data(&MPU6050_1);
 //		MPU6050_Read_GYRO_Data(&MPU6050_1);
